@@ -1,86 +1,79 @@
 openapi: 3.0.0
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/DAMIANORDONEZP/pruebatecnicBCNC/1.0.0
 info:
-  description: API de prueba tecnica
+  title: Price API
+  description: API to fetch the applicable price for a product based on the application date, product ID, and brand ID.
   version: "1.0.0"
-  title: API consulta
-  contact:
-    email: damianordonezp@gmail.com
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - url: 'http://localhost:8080/api'
 paths:
-  /inventory:
+  /prices:
     get:
-      summary: get inventory
-      operationId: getInventory
-      description: |
-        By passing in the appropriate options, you can search for
-        available inventory in the system
+      summary: Get applicable price
+      description: Retrieves the applicable price based on the provided application date, product ID, and brand ID.
       parameters:
-        - in: query
-          name: aplicationDate
-          description: fecha de aplicacion
-          required: false
-          schema:
-            type: string
-            format: date
-        - in: query
-          name: idProduct
-          description: identificador del producto
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-        - in: query
-          name: idBrand
-          description: identificador de cadena
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 52147483647
+        - $ref: '#/components/parameters/ApplicationDate'
+        - $ref: '#/components/parameters/ProductId'
+        - $ref: '#/components/parameters/BrandId'
       responses:
         '200':
-          description: search results matching criteria
+          description: Successfully retrieved the price
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/datosResponse'
-        '400':
-          description: bad input parameter
+                $ref: '#/components/schemas/PriceResponse'
         '404':
-          description: not found
+          description: Price not found for the given parameters
+        '400':
+          description: Invalid input provided
 components:
+  parameters:
+    ApplicationDate:
+      name: applicationDate
+      in: query
+      required: true
+      description: Application date to determine the applicable price.
+      schema:
+        type: string
+        format: date-time
+      example: '2020-06-14T10:00:00Z'
+    ProductId:
+      name: productId
+      in: query
+      required: true
+      description: The product identifier for which the price needs to be fetched.
+      schema:
+        type: integer
+      example: 35455
+    BrandId:
+      name: brandId
+      in: query
+      required: true
+      description: The brand identifier to specify which brand the product belongs to.
+      schema:
+        type: integer
+      example: 1
   schemas:
-    datosResponse:
+    PriceResponse:
       type: object
-      required:
-        - idProduct
-        - idBrand
-        - tariff
-        - aplicationDate
-        - finalPrice
       properties:
-        idProduct:
+        productId:
           type: integer
-          example: 0123456789
-        idBrand:
-          type: integer
-          example: 0123456789
-        tariff:
+          example: 35455
+        brandId:
           type: integer
           example: 1
-        aplicationDate:
-          type: string
-          format: date
-          example: '2017-07-21'
-        finalPrice:
+        priceList:
           type: integer
-          format: float
-          example: 5.30
+          example: 2
+        startDate:
+          type: string
+          format: date-time
+          example: '2020-06-14T15:00:00'
+        endDate:
+          type: string
+          format: date-time
+          example: '2020-06-14T18:30:00'
+        price:
+          type: number
+          format: double
+          example: 25.45
