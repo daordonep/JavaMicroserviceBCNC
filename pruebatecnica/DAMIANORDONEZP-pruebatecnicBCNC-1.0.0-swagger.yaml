@@ -10,6 +10,7 @@ paths:
     get:
       summary: Get applicable price
       description: Retrieves the applicable price based on the provided application date, product ID, and brand ID.
+      operationId: getPrice
       parameters:
         - $ref: '#/components/parameters/ApplicationDate'
         - $ref: '#/components/parameters/ProductId'
