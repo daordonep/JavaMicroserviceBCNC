@@ -1,0 +1,86 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DAMIANORDONEZP/pruebatecnicBCNC/1.0.0
+info:
+  description: API de prueba tecnica
+  version: "1.0.0"
+  title: API consulta
+  contact:
+    email: damianordonezp@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /inventory:
+    get:
+      summary: get inventory
+      operationId: getInventory
+      description: |
+        By passing in the appropriate options, you can search for
+        available inventory in the system
+      parameters:
+        - in: query
+          name: aplicationDate
+          description: fecha de aplicacion
+          required: false
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: idProduct
+          description: identificador del producto
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: idBrand
+          description: identificador de cadena
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 52147483647
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/datosResponse'
+        '400':
+          description: bad input parameter
+        '404':
+          description: not found
+components:
+  schemas:
+    datosResponse:
+      type: object
+      required:
+        - idProduct
+        - idBrand
+        - tariff
+        - aplicationDate
+        - finalPrice
+      properties:
+        idProduct:
+          type: integer
+          example: 0123456789
+        idBrand:
+          type: integer
+          example: 0123456789
+        tariff:
+          type: integer
+          example: 1
+        aplicationDate:
+          type: string
+          format: date
+          example: '2017-07-21'
+        finalPrice:
+          type: integer
+          format: float
+          example: 5.30
