@@ -26,6 +26,8 @@ paths:
           description: Price not found for the given parameters
         '400':
           description: Invalid input provided
+        '500':
+          description: Internal server error
 components:
   parameters:
     ApplicationDate:
