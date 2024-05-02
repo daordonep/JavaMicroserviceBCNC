@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  title: Price API
+  description: API to fetch the applicable price for a product based on the application date, product ID, and brand ID.
+  version: "1.0.0"
+servers:
+  - url: 'http://localhost:8081/prices-api'
+paths:
+  /prices:
+    get:
+      summary: Get applicable price
+      description: Retrieves the applicable price based on the provided application date, product ID, and brand ID.
+      operationId: getPrice
+      parameters:
+        - $ref: '#/components/parameters/ApplicationDate'
+        - $ref: '#/components/parameters/ProductId'
+        - $ref: '#/components/parameters/BrandId'
+      responses:
+        '200':
+          description: Successfully retrieved the price
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '404':
+          description: Price not found for the given parameters
+        '400':
+          description: Invalid input provided
+        '500':
+          description: Internal server error
+components:
+  parameters:
+    ApplicationDate:
+      name: applicationDate
+      in: query
+      required: true
+      description: Application date to determine the applicable price.
+      schema:
+        type: string
+        format: date-time
+      example: '2020-06-14T10:00:00Z'
+    ProductId:
+      name: productId
+      in: query
+      required: true
+      description: The product identifier for which the price needs to be fetched.
+      schema:
+        type: integer
+      example: 35455
+    BrandId:
+      name: brandId
+      in: query
+      required: true
+      description: The brand identifier to specify which brand the product belongs to.
+      schema:
+        type: integer
+      example: 1
+  schemas:
+    PriceResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          example: 35455
+        brandId:
+          type: integer
+          example: 1
+        priceList:
+          type: integer
+          example: 2
+        startDate:
+          type: string
+          format: date-time
+          example: '2020-06-14T15:00:00'
+        endDate:
+          type: string
+          format: date-time
+          example: '2020-06-14T18:30:00'
+        price:
+          type: number
+          format: double
+          example: 25.45
