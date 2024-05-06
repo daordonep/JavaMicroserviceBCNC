@@ -38,7 +38,7 @@ public class PriceController {
 
     ) {
         try {
-            System.out.println("Entra");
+
             PriceDTO priceDTO = restPriceMapper.priceTopriceDTO(priceService.getPrice(applicationDate, productId, brandId));
             return ResponseEntity.ok(priceDTO);
 
@@ -55,7 +55,4 @@ public class PriceController {
             }
         }
     }
-
-    @GetMapping(value = "/prices2")
-    ResponseEntity getPrices2(  ){return ResponseEntity.ok().build();}
 }
