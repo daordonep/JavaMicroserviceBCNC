@@ -4,7 +4,10 @@ package com.dharian.pricesapi.infraestructure.controller;
 import com.dharian.pricesapi.application.mapper.RestPriceMapper;
 import com.dharian.pricesapi.application.service.PriceServiceImpl;
 import com.dharian.pricesapi.infraestructure.dto.PriceDTO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +25,7 @@ public class PriceController {
 
     private final PriceServiceImpl priceService;
     private final RestPriceMapper restPriceMapper;
-
+    private static final Logger logger = LogManager.getLogger(PriceController.class);
     @Autowired
     public PriceController(PriceServiceImpl priceService, RestPriceMapper restPriceMapper) {
         this.priceService = priceService;
@@ -32,18 +35,17 @@ public class PriceController {
     @GetMapping(value = "/prices")
     ResponseEntity<PriceDTO> getPrices(
 
-            @RequestParam(value = "applicationDate", required = false) LocalDateTime applicationDate,
+            @RequestParam(value = "applicationDate", required = false ) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime  applicationDate,
             @RequestParam(value = "productId", required = false) Integer productId,
             @RequestParam(value = "brandId", required = false) Integer brandId
 
     ) {
         try {
-
             PriceDTO priceDTO = restPriceMapper.priceTopriceDTO(priceService.getPrice(applicationDate, productId, brandId));
             return ResponseEntity.ok(priceDTO);
 
         } catch (ResponseStatusException e) {
-
+        logger.error(e.getMessage());
             if (e.getStatus().equals(HttpStatus.NOT_FOUND)) {
 
                 return ResponseEntity.notFound().build();

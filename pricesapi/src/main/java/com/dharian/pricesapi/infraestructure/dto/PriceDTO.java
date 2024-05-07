@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PriceDTO {
-    private LocalDateTime applicationDate;
+
     private Integer productId;
-    private Integer brandId;
+    private String brandId;
     private Integer priceList;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

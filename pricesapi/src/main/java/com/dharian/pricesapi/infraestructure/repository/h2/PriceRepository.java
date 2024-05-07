@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Repository
 public interface PriceRepository extends JpaRepository<PriceEntity, Integer> {
 
     @Query("select p from PriceEntity p " +
-            "where p.brandId = ?1 and p.productId = ?2 and p.startDate >= ?3 and p.endDate <= ?3")
-    PriceEntity findByBrandIdAndProductIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(int brandId, int productId, Timestamp applicationDate);
+            "where p.brandId = :brandId and p.productId = :productId and p.startDate <= :applicationDate and p.endDate >= :applicationDate")
+    List<PriceEntity> findByBrandIdAndProductIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(int brandId, int productId, Timestamp applicationDate);
 }
