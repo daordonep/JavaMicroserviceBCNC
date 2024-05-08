@@ -4,8 +4,8 @@ package com.dharian.pricesapi.infraestructure.controller;
 import com.dharian.pricesapi.application.mapper.RestPriceMapper;
 import com.dharian.pricesapi.application.service.PriceServiceImpl;
 import com.dharian.pricesapi.infraestructure.dto.PriceDTO;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -20,32 +20,29 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/prices-api")
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+@Slf4j
 public class PriceController {
 
 
     private final PriceServiceImpl priceService;
     private final RestPriceMapper restPriceMapper;
-    private static final Logger logger = LogManager.getLogger(PriceController.class);
-    @Autowired
-    public PriceController(PriceServiceImpl priceService, RestPriceMapper restPriceMapper) {
-        this.priceService = priceService;
-        this.restPriceMapper = restPriceMapper;
-    }
+
 
     @GetMapping(value = "/prices")
     ResponseEntity<PriceDTO> getPrices(
 
-            @RequestParam(value = "applicationDate", required = false ) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime  applicationDate,
-            @RequestParam(value = "productId", required = false) Integer productId,
-            @RequestParam(value = "brandId", required = false) Integer brandId
+            @RequestParam(value = "applicationDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime  applicationDate,
+            @RequestParam(value = "productId") Integer productId,
+            @RequestParam(value = "brandId") Integer brandId
 
     ) {
         try {
-            PriceDTO priceDTO = restPriceMapper.priceTopriceDTO(priceService.getPrice(applicationDate, productId, brandId));
-            return ResponseEntity.ok(priceDTO);
+           return ResponseEntity.ok(restPriceMapper.priceTopriceDTO(priceService.getPrice(applicationDate, productId, brandId)));
+
 
         } catch (ResponseStatusException e) {
-        logger.error(e.getMessage());
+        log.error(e.getMessage());
             if (e.getStatus().equals(HttpStatus.NOT_FOUND)) {
 
                 return ResponseEntity.notFound().build();

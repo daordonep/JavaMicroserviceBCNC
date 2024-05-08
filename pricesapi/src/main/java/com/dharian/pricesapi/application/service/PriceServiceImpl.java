@@ -6,8 +6,8 @@ import com.dharian.pricesapi.domain.Price;
 import com.dharian.pricesapi.infraestructure.mapper.PriceEntityMapper;
 import com.dharian.pricesapi.infraestructure.repository.entity.PriceEntity;
 import com.dharian.pricesapi.infraestructure.repository.h2.PriceRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,22 +17,18 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 @Service
+@Slf4j
 public class PriceServiceImpl implements PriceService {
     private final PriceRepository priceRepository;
     private final PriceEntityMapper priceEntityMapper;
-    private static final Logger logger = LogManager.getLogger(PriceServiceImpl.class);
-    @Autowired
-    public PriceServiceImpl(PriceRepository priceRepository, PriceEntityMapper priceEntityMapper) {
-        this.priceRepository = priceRepository;
-        this.priceEntityMapper = priceEntityMapper;
-    }
+
+
 
     @Override
     public Price getPrice(LocalDateTime applicationDate, Integer productId, Integer brandId) {
         try {
-
             List<PriceEntity> listPriceEntity = priceRepository.findByBrandIdAndProductIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(brandId, productId, Timestamp.valueOf(applicationDate));
             PriceEntity priceEntity = listPriceEntity
                     .stream()
@@ -43,10 +39,11 @@ public class PriceServiceImpl implements PriceService {
                             .filter(priceEntity2 -> priceEntity2.getPriority() == 0)
                             .findFirst().get());
 
+
             return priceEntityMapper.priceEntityToPrice(priceEntity);
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Price not found", e);
 
         }
