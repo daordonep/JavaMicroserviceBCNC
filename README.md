@@ -31,7 +31,8 @@ manera:
        - entity : El modelo que tiene la relacion con la bbdd y que usará JPA.
        - h2 : La interfaz que tiene la query para la bbdd y sacar los respectivos datos.
    
- 
+ Si se quiere ver el reporte generado por JaCoCo habría que acceder a la siguiente ruta:  
+ `target -> site -> jacoco -> index.html`
 ## Tecnologias Usadas
 - SpringBoot 2.7.0
 - Version de java: 11
@@ -41,6 +42,7 @@ manera:
 - Lombok: para que las entidades se queden más limpias y simplificar el codigo.
 - Mapstruct: para realizar mapeos de entidades.
 - Apache log4j: para poder usar logs en la aplicación y debuggear.
+- JaCoCo: para ver los reportes de los test ejecutados.
 
 
 ## Features
@@ -89,6 +91,7 @@ que devolvería el siguiente objeto:
 ```
 
 ## Setup
+### SE NECESITA HACER UN CLEAN INSTALL ANTES DE LEVANTAR LA APLICACIÓN.
 Ya que la aplicación usa una base de datos H2, necesita los scripts `data.sql` y `schema.sql`.  
 
 El script `data.sql` se encarga de rellenar los datos de la bbdd cada vez que la aplicación se ejecute.  
@@ -96,6 +99,8 @@ El script `data.sql` se encarga de rellenar los datos de la bbdd cada vez que la
 El script `schema.sql` crea la base de datos con su respectivo modelo. 
 En la raíz también esta el documento `DAMIANORDONEZP-pruebatecnicBCNC-1.0.0-swagger.yaml` donde podemos encontrar
 la documento del endpoint y del modelo.
+
+
 
 ## Contacto
 Creado por [Dharian](https://github.com/daordonep/)  

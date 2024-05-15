@@ -24,33 +24,24 @@ import java.time.LocalDateTime;
 @Slf4j
 public class PriceController {
 
-
     private final PriceServiceImpl priceService;
     private final RestPriceMapper restPriceMapper;
 
-
     @GetMapping(value = "/prices")
     ResponseEntity<PriceDTO> getPrices(
-
-            @RequestParam(value = "applicationDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime  applicationDate,
+            @RequestParam(value = "applicationDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applicationDate,
             @RequestParam(value = "productId") Integer productId,
             @RequestParam(value = "brandId") Integer brandId
 
     ) {
         try {
-           return ResponseEntity.ok(restPriceMapper.priceTopriceDTO(priceService.getPrice(applicationDate, productId, brandId)));
-
-
+            return ResponseEntity.ok(restPriceMapper.priceTopriceDTO(priceService.getPrice(applicationDate, productId, brandId)));
         } catch (ResponseStatusException e) {
-        log.error(e.getMessage());
+            log.error(e.getMessage());
             if (e.getStatus().equals(HttpStatus.NOT_FOUND)) {
-
                 return ResponseEntity.notFound().build();
-
             } else {
-
                 return ResponseEntity.status(e.getRawStatusCode()).build();
-
             }
         }
     }
