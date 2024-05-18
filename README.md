@@ -34,13 +34,7 @@ manera:
             - entity : El modelo que tiene la relacion con la bbdd y que usará JPA.
             - h2 : La interfaz que tiene la query para la bbdd y sacar los respectivos datos.
 
-Para generar un reporte de JaCoCo ejecutar el siguiente comando de maven:  
-`
-mvn clean test
-mvn jacoco:report
-`  
-Si se quiere ver el reporte generado por JaCoCo habría que acceder a la siguiente ruta:  
-`target -> site -> jacoco -> index.html`
+
 
 ## Tecnologias Usadas
 
@@ -117,6 +111,16 @@ El script `data.sql` se encarga de rellenar los datos de la bbdd cada vez que la
 El script `schema.sql` crea la base de datos con su respectivo modelo.
 En la raíz también esta el documento `DAMIANORDONEZP-pruebatecnicBCNC-1.0.0-swagger.yaml` donde podemos encontrar
 la documento del endpoint y del modelo.
+
+Para generar un reporte de JaCoCo ejecutar el siguiente comando de maven:  
+`
+mvn clean test
+mvn jacoco:report
+`  
+Si se quiere ver el reporte generado por JaCoCo habría que acceder a la siguiente ruta:  
+`target -> site -> jacoco -> index.html`
+
+Levantar la aplicacion desde pricesapi y no desde la carpeta JavaMicroserviceBCNC.
 
 ## Contacto
 
