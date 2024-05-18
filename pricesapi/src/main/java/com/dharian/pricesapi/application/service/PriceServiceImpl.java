@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 @Service
@@ -25,27 +24,14 @@ public class PriceServiceImpl implements PriceService {
     private final PriceEntityMapper priceEntityMapper;
 
 
-
     @Override
     public Price getPrice(LocalDateTime applicationDate, Integer productId, Integer brandId) {
-        try {
-            List<PriceEntity> listPriceEntity = priceRepository.findByBrandIdAndProductIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(brandId, productId, Timestamp.valueOf(applicationDate));
-            PriceEntity priceEntity = listPriceEntity
-                    .stream()
-                    .filter(priceEntity1 -> priceEntity1.getPriority() == 1)
-                    .findFirst()
-                    .orElse(listPriceEntity
-                            .stream()
-                            .filter(priceEntity2 -> priceEntity2.getPriority() == 0)
-                            .findFirst().get());
 
-
-            return priceEntityMapper.priceEntityToPrice(priceEntity);
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Price not found", e);
-
+        PriceEntity responseRepository = priceRepository.getSinglePrice(brandId, productId, Timestamp.valueOf(applicationDate));
+        if (responseRepository == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Price not found");
         }
+        return priceEntityMapper.priceEntityToPrice(responseRepository);
+
     }
 }
