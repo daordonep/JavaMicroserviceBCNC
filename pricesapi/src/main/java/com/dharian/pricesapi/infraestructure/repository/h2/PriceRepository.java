@@ -17,6 +17,7 @@ public class PriceRepository {
 
     private final EntityManager entityManager;
 
+
     public PriceEntity getSinglePrice(int brandId, int productId, Timestamp applicationDate) {
         TypedQuery<PriceEntity> query = entityManager.createQuery(
                         "SELECT p FROM PriceEntity p " +
@@ -28,9 +29,10 @@ public class PriceRepository {
                 .setParameter("brandId", brandId)
                 .setParameter("productId", productId)
                 .setParameter("applicationDate", applicationDate)
-
                 .setMaxResults(1);
         List<PriceEntity> resultList = query.getResultList();
         return resultList.isEmpty() ? null : resultList.get(0);
     }
+
+   
 }

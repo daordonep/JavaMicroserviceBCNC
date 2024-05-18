@@ -4,6 +4,7 @@ package com.dharian.pricesapi.application.service;
 import com.dharian.pricesapi.application.port.in.PriceService;
 import com.dharian.pricesapi.domain.Price;
 import com.dharian.pricesapi.infraestructure.mapper.PriceEntityMapper;
+import com.dharian.pricesapi.infraestructure.repository.entity.PriceEntity;
 import com.dharian.pricesapi.infraestructure.repository.h2.PriceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +26,12 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public Price getPrice(LocalDateTime applicationDate, Integer productId, Integer brandId) {
-        try {
-            return priceEntityMapper.priceEntityToPrice(priceRepository.getSinglePrice(brandId, productId, Timestamp.valueOf(applicationDate)));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Price not found", e);
+
+        PriceEntity responseRepository = priceRepository.getSinglePrice(brandId, productId, Timestamp.valueOf(applicationDate));
+        if (responseRepository == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Price not found");
         }
+        return priceEntityMapper.priceEntityToPrice(responseRepository);
+
     }
 }
