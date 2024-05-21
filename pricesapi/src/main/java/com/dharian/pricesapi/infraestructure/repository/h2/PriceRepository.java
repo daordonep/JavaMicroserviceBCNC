@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -30,9 +30,9 @@ public class PriceRepository {
                 .setParameter("productId", productId)
                 .setParameter("applicationDate", applicationDate)
                 .setMaxResults(1);
-        List<PriceEntity> resultList = query.getResultList();
-        return resultList.isEmpty() ? null : resultList.get(0);
+        PriceEntity result = query.getSingleResult();
+        return Objects.nonNull(result) ? result : null;
     }
 
-   
+
 }
